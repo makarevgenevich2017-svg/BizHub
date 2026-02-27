@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Бизнес‑портал · Минимализм</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --bg: #f5f7fa;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --accent: #2563eb;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --gradient-chat: linear-gradient(135deg, #2563eb, #8b5cf6);
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-hover: 0 8px 20px rgba(0,0,0,0.08);
+            --radius: 8px;
+            --transition: 0.2s ease;
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --accent: #3b82f6;
+            --accent-green: #34d399;
+            --accent-red: #f87171;
+            --accent-orange: #fbbf24;
+            --gradient-chat: linear-gradient(135deg, #3b82f6, #a78bfa);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        /* ========== ОСНОВНОЙ КОНТЕЙНЕР ========== */
+        .app {
+            max-width: 1200px;
+            width: 100%;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        /* ========== ВЕРХНЯЯ ПАНЕЛЬ ========== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .right-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .theme-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .theme-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .chat-header-btn {
+            background: var(--gradient-chat);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        }
+        .chat-header-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .chat-header-btn.hidden {
+            display: none;
+        }
+
+        /* ========== КОНТЕЙНЕР СТРАНИЦ ========== */
+        .pages {
+            padding: 24px;
+            min-height: 70vh;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+            animation: fade 0.2s;
+        }
+        @keyframes fade { from { opacity:0.5; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+
+        /* ========== ЗАГОЛОВКИ СТРАНИЦ ========== */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .back-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* ========== СТРАНИЦА 0 (ВХОД) ========== */
+        .welcome-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+        }
+        .welcome-card h2 {
+            font-size: 2rem;
+            margin-bottom: 24px;
+            color: var(--accent);
+        }
+        .field {
+            margin-bottom: 20px;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        .field input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .field input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* ========== СТРАНИЦА 1 (СПИСОК БИЗНЕСОВ) ========== */
+        .fio-large {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .address-line {
+            color: var(--text-light);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg);
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            width: fit-content;
+            border: 1px solid var(--border);
+        }
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .tile {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .tile:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        .tile-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .tile-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .tile-addr {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .page-btn-plus {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+        .btn-plus {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+        }
+        .btn-plus:hover {
+            transform: scale(1.05);
+            background: #0d9488;
+        }
+
+        /* ========== СТРАНИЦА 3 (ДЕТАЛИ БИЗНЕСА) ========== */
+        .biz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .action-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .chart-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .donut {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-green) 0deg 200deg, var(--accent-red) 200deg 360deg);
+            border: 2px solid var(--border);
+        }
+        .legend {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .legend-green::before { content: "●"; color: var(--accent-green); margin-right: 4px; }
+        .legend-red::before { content: "●"; color: var(--accent-red); margin-right: 4px; }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0 20px;
+        }
+        .kpi-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .kpi-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        /* ========== СТРАНИЦА 4 (ДОКУМЕНТЫ) ========== */
+        .docs-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .doc-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 22px;
+        }
+        .doc-item.clickable {
+            cursor: pointer;
+        }
+        .doc-item.clickable:hover {
+            border-color: var(--accent);
+        }
+        .doc-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .doc-value {
+            margin-top: 8px;
+            color: var(--text-light);
+        }
+        .checks-hidden {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+            margin-top: 0;
+        }
+        .checks-hidden.show {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 16px;
+        }
+        .check-line {
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 32px 0 16px;
+        }
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+        .note-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+        .note-card .title {
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .note-body {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+            margin-top: 0;
+            color: var(--text-light);
+        }
+        .note-body.show {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+        .edit-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 4px 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            margin-top: 8px;
+            color: var(--text);
+        }
+        .edit-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* ========== СТРАНИЦА 5 (СОТРУДНИКИ) ========== */
+        .employees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .emp-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .emp-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .emp-detail {
+            color: var(--text-light);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ========== СТРАНИЦА 6 (ЧАТ) ========== */
+        .chat-window {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .chat-messages {
+            max-height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .msg {
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            max-width: 80%;
+            word-break: break-word;
+        }
+        .msg.user {
+            background: var(--accent);
+            color: white;
+            align-self: flex-end;
+        }
+        .msg.assistant {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            align-self: flex-start;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+        }
+        .chat-send {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ========== МОДАЛЬНЫЕ ОКНА ========== */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-hover);
+        }
+        .modal-card h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        .modal-field {
+            margin-bottom: 16px;
+        }
+        .modal-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-light);
+        }
+        .modal-field input,
+        .modal-field textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            resize: vertical;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .modal-btn.primary {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+        }
+        .modal-btn.primary:hover {
+            opacity: 0.9;
+        }
+
+        /* ========== АДАПТАЦИЯ ПОД ТЕЛЕФОНЫ ========== */
+        @media (max-width: 700px) {
+            body { padding: 8px; }
+            .pages { padding: 16px; }
+            .page-title { font-size: 1.8rem; }
+            .fio-large { font-size: 1.5rem; }
+            .business-grid { grid-template-columns: 1fr; }
+            .kpi-row { grid-template-columns: 1fr; }
+            .action-group { width: 100%; }
+            .action-btn { flex: 1; }
+            .biz-header { flex-direction: column; align-items: stretch; }
+            .chart-block { justify-content: space-between; }
+        }
+
+        hr { border: 1px solid var(--border); margin: 24px 0; }
+        i { margin-right: 6px; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- Верхняя панель с кнопкой чата (скрыта на странице входа) -->
+    <div class="top-bar">
+        <div class="logo">BizHub</div>
+        <div class="right-actions">
+            <button class="chat-header-btn hidden" id="chatHeaderBtn"><i class="fas fa-comment"></i></button>
+            <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i> Тёмная</button>
+        </div>
+    </div>
+
+    <!-- Контейнер страниц -->
+    <div class="pages">
+        <!-- СТРАНИЦА 0 (вход) -->
+        <div id="page0" class="page active">
+            <div class="page-header">
+                <div class="page-title">Вход</div>
+            </div>
+            <div class="welcome-card">
+                <h2>Добро пожаловать</h2>
+                <div class="field">
+                    <label>ФИО</label>
+                    <input type="text" id="fioField" value="Петров Алексей">
+                </div>
+                <div class="field">
+                    <label>Название бизнеса</label>
+                    <input type="text" id="bizNameField" value="Кофейня «Арабика»">
+                </div>
+                <div class="field">
+                    <label>Адрес</label>
+                    <input type="text" id="addrField" value="пр. Мира, 15">
+                </div>
+                <button class="btn-primary" id="startBtn">Войти</button>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 1 (список бизнесов) -->
+        <div id="page1" class="page">
+            <div class="page-header">
+                <div class="page-title">Мои бизнесы</div>
+            </div>
+            <div class="fio-large" id="page1Fio"></div>
+            <div class="address-line" id="page1Addr"></div>
+            <div class="business-grid" id="businessGrid"></div>
+            <!-- кнопка плюс только здесь -->
+            <div class="page-btn-plus">
+                <button class="btn-plus" id="addBizBtn"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 3 (детали бизнеса) -->
+        <div id="page3" class="page">
+            <div class="page-header">
+                <button class="back-btn" id="backFromPage3"><i class="fas fa-arrow-left"></i></button>
+                <div class="page-title" id="page3BizName"></div>
+            </div>
+            <div class="biz-header">
+                <div class="action-group">
+                    <button class="action-btn" id="toDocsPage"><i class="fas fa-file-alt"></i> Документы</button>
+                    <button class="action-btn" id="toEmpsPage"><i class="fas fa-users"></i> Сотрудники</button>
+                </div>
+                <div class="chart-block">
+                    <div class="donut" id="donut"></div>
+                    <div class="legend">
+                        <span class="legend-green">заработано</span>
+                        <span class="legend-red">потрачено</span>
+                    </div>
+                </div>
+            </div>
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-label"><i class="fas fa-user-group"></i> Людей</div>
+                    <div class="kpi-value" id="peopleVal">124</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i class="fas fa-coins"></i> Заработано</div>
+                    <div class="kpi-value" id="earnedVal">30 000 ₽</div>
+                </div>
+            </div>
+            <!-- Блок аналитики/плана/задач полностью удалён -->
+        </div>
+
+        <!-- СТРАНИЦА 4 (Документы) -->
+        <div id="page4" class="page">
+            <div class="page-header">
+                <button class="back-btn" id="backFromPage4"><i class="fas fa-arrow-left"></i></button>
+                <div class="page-title">Документы</div>
+            </div>
+            <div class="docs-stack">
+                <div class="doc-item">
+                    <div class="doc-title"><i class="fas fa-id-card"></i> ИНН</div>
+                    <div class="doc-value" id="innVal">7701123456</div>
+                </div>
+                <div class="doc-item">
+                    <div class="doc-title"><i class="fas fa-store"></i> Аренда</div>
+                    <div class="doc-value" id="rentVal">75 000 ₽/мес</div>
+                </div>
+                <div class="doc-item clickable" id="checksBlock">
+                    <div class="doc-title"><i class="fas fa-receipt"></i> Чеки <i class="fas fa-chevron-down" style="margin-left:auto;"></i></div>
+                    <div class="checks-hidden" id="checksContainer"></div>
+                </div>
+            </div>
+            <hr>
+            <div class="notes-header">
+                <h3><i class="fas fa-sticky-note"></i> Заметки</h3>
+                <button class="action-btn" id="openNoteModal"><i class="fas fa-plus"></i> Добавить</button>
+            </div>
+            <div class="notes-grid" id="notesGrid"></div>
+        </div>
+
+        <!-- СТРАНИЦА 5 (Сотрудники) -->
+        <div id="page5" class="page">
+            <div class="page-header">
+                <button class="back-btn" id="backFromPage5"><i class="fas fa-arrow-left"></i></button>
+                <div class="page-title">Сотрудники</div>
+            </div>
+            <div class="employees-grid" id="empGrid"></div>
+        </div>
+
+        <!-- СТРАНИЦА 6 (Чат) -->
+        <div id="page6" class="page">
+            <div class="page-header">
+                <button class="back-btn" id="backFromPage6"><i class="fas fa-arrow-left"></i></button>
+                <div class="page-title">Чат</div>
+            </div>
+            <div class="chat-window">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="msg assistant"><i class="fas fa-robot"></i> Здравствуйте! Команды: привет, сколько людей, очистить количество людей, сбрось доход, удали аккаунт.</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Введите сообщение...">
+                    <button class="chat-send" id="sendChat">➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования заметки -->
+    <div class="modal" id="noteModal">
+        <div class="modal-card">
+            <h3 id="noteModalTitle">Новая заметка</h3>
+            <div class="modal-field">
+                <label>Название</label>
+                <input type="text" id="noteTitle" placeholder="Краткое название">
+            </div>
+            <div class="modal-field">
+                <label>Текст</label>
+                <textarea id="noteText" rows="3" placeholder="Содержание заметки"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" id="cancelNote">Отмена</button>
+                <button class="modal-btn primary" id="saveNote">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для создания бизнеса -->
+    <div class="modal" id="businessModal">
+        <div class="modal-card">
+            <h3>Новый бизнес</h3>
+            <div class="modal-field">
+                <label>Название</label>
+                <input type="text" id="bizName" placeholder="Например, Магазин">
+            </div>
+            <div class="modal-field">
+                <label>Адрес</label>
+                <input type="text" id="bizAddr" placeholder="ул. Строителей, 8">
+            </div>
+            <div class="modal-field">
+                <label>Стартовый капитал (₽)</label>
+                <input type="number" id="bizCapital" value="30000" min="0">
+            </div>
+            <div class="modal-field">
+                <label>Количество человек</label>
+                <input type="number" id="bizPeople" value="124" min="0">
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" id="cancelBiz">Отмена</button>
+                <button class="modal-btn primary" id="saveBiz">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ========== КЛАСС БИЗНЕСА ==========
+        class Business {
+            constructor(id, name, address, capital = 30000, people = 124, inn = '7701123456', rent = '75 000 ₽/мес') {
+                this.id = id;
+                this.name = name;
+                this.address = address;
+                this.people = people;
+                this.earned = capital;
+                this.inn = inn;
+                this.rent = rent;
+                this.checks = ['🧾 Чек #2341 от 10.02 — 12 400₽', '🧾 Чек #8743 от 09.02 — 3 250₽', '🧾 Чек #0092 от 08.02 — 8 990₽'];
+                this.notes = [];
+            }
+        }
+
+        // ========== ГЛОБАЛЬНЫЕ ДАННЫЕ ==========
+        let businesses = [];
+        let currentBusinessId = null;
+        let userFio = 'Петров Алексей';
+        let userGlobalAddress = 'пр. Мира, 15';
+
+        // ========== DOM ЭЛЕМЕНТЫ ==========
+        const pages = document.querySelectorAll('.page');
+        const page0 = document.getElementById('page0');
+        const page1 = document.getElementById('page1');
+        const page3 = document.getElementById('page3');
+        const page4 = document.getElementById('page4');
+        const page5 = document.getElementById('page5');
+        const page6 = document.getElementById('page6');
+
+        // Элементы 0
+        const fioField = document.getElementById('fioField');
+        const bizNameField = document.getElementById('bizNameField');
+        const addrField = document.getElementById('addrField');
+        const startBtn = document.getElementById('startBtn');
+
+        // 1
+        const page1Fio = document.getElementById('page1Fio');
+        const page1Addr = document.getElementById('page1Addr');
+        const businessGrid = document.getElementById('businessGrid');
+        const addBizBtn = document.getElementById('addBizBtn');
+
+        // 3
+        const page3BizName = document.getElementById('page3BizName');
+        const peopleVal = document.getElementById('peopleVal');
+        const earnedVal = document.getElementById('earnedVal');
+        const donut = document.getElementById('donut');
+        const toDocsPage = document.getElementById('toDocsPage');
+        const toEmpsPage = document.getElementById('toEmpsPage');
+
+        // 4
+        const innVal = document.getElementById('innVal');
+        const rentVal = document.getElementById('rentVal');
+        const checksContainer = document.getElementById('checksContainer');
+        const checksBlock = document.getElementById('checksBlock');
+        const notesGrid = document.getElementById('notesGrid');
+        const openNoteModal = document.getElementById('openNoteModal');
+
+        // 5
+        const empGrid = document.getElementById('empGrid');
+
+        // 6
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendChat = document.getElementById('sendChat');
+        const chatHeaderBtn = document.getElementById('chatHeaderBtn');
+
+        // Модалка заметки
+        const noteModal = document.getElementById('noteModal');
+        const noteModalTitle = document.getElementById('noteModalTitle');
+        const noteTitle = document.getElementById('noteTitle');
+        const noteText = document.getElementById('noteText');
+        const cancelNote = document.getElementById('cancelNote');
+        const saveNote = document.getElementById('saveNote');
+        let currentEditingNoteId = null;
+
+        // Модалка бизнеса
+        const businessModal = document.getElementById('businessModal');
+        const bizName = document.getElementById('bizName');
+        const bizAddr = document.getElementById('bizAddr');
+        const bizCapital = document.getElementById('bizCapital');
+        const bizPeople = document.getElementById('bizPeople');
+        const cancelBiz = document.getElementById('cancelBiz');
+        const saveBiz = document.getElementById('saveBiz');
+
+        // Кнопки назад
+        document.getElementById('backFromPage3').addEventListener('click', () => showPage('page1'));
+        document.getElementById('backFromPage4').addEventListener('click', () => showPage('page3'));
+        document.getElementById('backFromPage5').addEventListener('click', () => showPage('page3'));
+        document.getElementById('backFromPage6').addEventListener('click', () => showPage('page3'));
+
+        // Тема
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            themeToggle.innerHTML = document.body.classList.contains('dark') ? '<i class="fas fa-sun"></i> Светлая' : '<i class="fas fa-moon"></i> Тёмная';
+        });
+
+        // Кнопка чата в шапке (изначально скрыта)
+        chatHeaderBtn.addEventListener('click', () => {
+            if (!currentBusinessId && businesses.length > 0) {
+                currentBusinessId = businesses[0].id;
+            }
+            showPage('page6');
+        });
+
+        // ========== ВСПОМОГАТЕЛЬНЫЕ ==========
+        function showPage(pageId) {
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            // Показываем кнопку чата только если не на странице входа
+            if (pageId === 'page0') {
+                chatHeaderBtn.classList.add('hidden');
+            } else {
+                chatHeaderBtn.classList.remove('hidden');
+            }
+
+            if (pageId === 'page1') renderPage1();
+            if (pageId === 'page3' && currentBusinessId) { renderPage3(); updateDonut(); }
+            if (pageId === 'page4' && currentBusinessId) renderPage4();
+            if (pageId === 'page5') renderEmployees();
+        }
+
+        function generateId() { return 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8); }
+
+        function updateDonut() {
+            const biz = businesses.find(b => b.id === currentBusinessId);
+            if (!biz) return;
+            const spent = Math.round(biz.earned * 0.2);
+            const total = biz.earned + spent;
+            if (total === 0) return;
+            const earnedDeg = (biz.earned / total) * 360;
+            donut.style.background = `conic-gradient(var(--accent-green) 0deg ${earnedDeg}deg, var(--accent-red) ${earnedDeg}deg 360deg)`;
+        }
+
+        // ========== СТАРТ ==========
+        startBtn.addEventListener('click', () => {
+            userFio = fioField.value.trim() || 'Петров Алексей';
+            const firstBizName = bizNameField.value.trim() || 'Кофейня';
+            const firstAddr = addrField.value.trim() || 'пр. Мира, 15';
+            userGlobalAddress = firstAddr;
+
+            const firstBiz = new Business(generateId(), firstBizName, firstAddr, 30000, 124);
+            firstBiz.notes.push({ id: 'note1', title: 'Идея', text: 'Расширение меню' });
+            firstBiz.notes.push({ id: 'note2', title: 'План', text: 'Встреча с поставщиками' });
+            businesses = [firstBiz];
+            currentBusinessId = firstBiz.id;
+            renderPage1();
+            showPage('page1');
+        });
+
+        // ========== РЕНДЕР 1 ==========
+        function renderPage1() {
+            page1Fio.innerText = userFio;
+            page1Addr.innerHTML = `<i class="fas fa-location-dot"></i> ${userGlobalAddress}`;
+            businessGrid.innerHTML = '';
+            businesses.forEach(biz => {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.dataset.id = biz.id;
+                tile.innerHTML = `
+                    <div class="tile-icon"><i class="fas fa-store-alt"></i></div>
+                    <div class="tile-name">${biz.name}</div>
+                    <div class="tile-addr"><i class="fas fa-map-pin"></i> ${biz.address}</div>
+                `;
+                tile.addEventListener('click', () => {
+                    currentBusinessId = biz.id;
+                    renderPage3();
+                    showPage('page3');
+                });
+                businessGrid.appendChild(tile);
+            });
+        }
+
+        // ========== РЕНДЕР 3 ==========
+        function renderPage3() {
+            const biz = businesses.find(b => b.id === currentBusinessId);
+            if (!biz) return;
+            page3BizName.innerText = biz.name;
+            peopleVal.innerText = biz.people;
+            earnedVal.innerText = biz.earned.toLocaleString() + ' ₽';
+        }
+
+        // ========== АВТООБНОВЛЕНИЕ ==========
+        setInterval(() => {
+            if (currentBusinessId) {
+                const biz = businesses.find(b => b.id === currentBusinessId);
+                if (biz) {
+                    biz.people += 2;
+                    const addEarn = Math.floor(Math.random() * (750 - 300 + 1)) + 300;
+                    biz.earned += addEarn;
+                    if (page3.classList.contains('active')) {
+                        peopleVal.innerText = biz.people;
+                        earnedVal.innerText = biz.earned.toLocaleString() + ' ₽';
+                        updateDonut();
+                    }
+                }
+            }
+        }, 10000);
+
+        // ========== РЕНДЕР 4 ==========
+        function renderPage4() {
+            const biz = businesses.find(b => b.id === currentBusinessId);
+            if (!biz) return;
+            innVal.innerText = biz.inn;
+            rentVal.innerText = biz.rent;
+            checksContainer.innerHTML = '';
+            biz.checks.forEach(ch => {
+                const div = document.createElement('div');
+                div.className = 'check-line';
+                div.innerText = ch;
+                checksContainer.appendChild(div);
+            });
+            notesGrid.innerHTML = '';
+            biz.notes.forEach(note => {
+                const card = document.createElement('div');
+                card.className = 'note-card';
+                card.dataset.noteId = note.id;
+                card.innerHTML = `
+                    <div class="title">
+                        <span><i class="fas fa-note-sticky"></i> ${note.title}</span>
+                        <span style="font-size:0.8rem;">▼</span>
+                    </div>
+                    <div class="note-body" id="note-${note.id}">
+                        ${note.text.replace(/\n/g, '<br>')}
+                        <br><button class="edit-btn" data-id="${note.id}">✏️ Редактировать</button>
+                    </div>
+                `;
+                const titleDiv = card.querySelector('.title');
+                const bodyDiv = card.querySelector('.note-body');
+                titleDiv.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('edit-btn')) {
+                        bodyDiv.classList.toggle('show');
+                    }
+                });
+                const editBtn = card.querySelector('.edit-btn');
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    currentEditingNoteId = note.id;
+                    noteModalTitle.innerText = 'Редактировать заметку';
+                    noteTitle.value = note.title;
+                    noteText.value = note.text;
+                    noteModal.style.display = 'flex';
+                });
+                notesGrid.appendChild(card);
+            });
+        }
+
+        // Раскрытие чеков
+        checksBlock.addEventListener('click', () => {
+            checksContainer.classList.toggle('show');
+        });
+
+        // ========== МОДАЛКА ЗАМЕТКИ ==========
+        openNoteModal.addEventListener('click', () => {
+            currentEditingNoteId = null;
+            noteModalTitle.innerText = 'Новая заметка';
+            noteTitle.value = '';
+            noteText.value = '';
+            noteModal.style.display = 'flex';
+        });
+
+        cancelNote.addEventListener('click', () => {
+            noteModal.style.display = 'none';
+        });
+
+        saveNote.addEventListener('click', () => {
+            const title = noteTitle.value.trim();
+            const text = noteText.value.trim();
+            if (!title || !text) {
+                alert('Заполните оба поля');
+                return;
+            }
+            const biz = businesses.find(b => b.id === currentBusinessId);
+            if (!biz) return;
+
+            if (currentEditingNoteId) {
+                const note = biz.notes.find(n => n.id === currentEditingNoteId);
+                if (note) {
+                    note.title = title;
+                    note.text = text;
+                }
+            } else {
+                biz.notes.push({ id: 'note_' + Date.now(), title, text });
+            }
+            renderPage4();
+            noteModal.style.display = 'none';
+        });
+
+        // ========== МОДАЛКА БИЗНЕСА ==========
+        addBizBtn.addEventListener('click', () => {
+            bizName.value = '';
+            bizAddr.value = '';
+            bizCapital.value = '30000';
+            bizPeople.value = '124';
+            businessModal.style.display = 'flex';
+        });
+
+        cancelBiz.addEventListener('click', () => {
+            businessModal.style.display = 'none';
+        });
+
+        saveBiz.addEventListener('click', () => {
+            const name = bizName.value.trim() || 'Новый бизнес';
+            const addr = bizAddr.value.trim() || 'Адрес не указан';
+            const capital = parseInt(bizCapital.value) || 30000;
+            const people = parseInt(bizPeople.value) || 124;
+            const newBiz = new Business(generateId(), name, addr, capital, people);
+            businesses.push(newBiz);
+            renderPage1();
+            businessModal.style.display = 'none';
+        });
+
+        // Закрытие модалок по клику вне
+        window.addEventListener('click', (e) => {
+            if (e.target === noteModal) noteModal.style.display = 'none';
+            if (e.target === businessModal) businessModal.style.display = 'none';
+        });
+
+        // ========== РЕНДЕР СОТРУДНИКОВ ==========
+        function renderEmployees() {
+            const emps = [
+                { name: 'Иван Петров', role: 'Бариста', age: 29, salary: '65 000₽', exp: '4 года' },
+                { name: 'Елена Смирнова', role: 'Управляющая', age: 34, salary: '82 000₽', exp: '7 лет' },
+                { name: 'Дмитрий Козлов', role: 'Повар', age: 42, salary: '73 000₽', exp: '12 лет' },
+                { name: 'Ольга Новикова', role: 'Официант', age: 27, salary: '58 000₽', exp: '2 года' },
+                { name: 'Анна Соколова', role: 'Администратор', age: 31, salary: '71 000₽', exp: '5 лет' }
+            ];
+            empGrid.innerHTML = '';
+            emps.forEach(e => {
+                const card = document.createElement('div');
+                card.className = 'emp-card';
+                card.innerHTML = `
+                    <div class="emp-name">${e.name}</div>
+                    <div class="emp-detail"><i class="fas fa-briefcase"></i> ${e.role}</div>
+                    <div class="emp-detail"><i class="fas fa-calendar-alt"></i> ${e.age} лет</div>
+                    <div class="emp-detail"><i class="fas fa-money-bill"></i> ${e.salary}</div>
+                    <div class="emp-detail"><i class="fas fa-clock"></i> стаж ${e.exp}</div>
+                `;
+                empGrid.appendChild(card);
+            });
+        }
+
+        // ========== ЧАТ ==========
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${sender}`;
+            msgDiv.innerHTML = sender === 'user' ? text : `<i class="fas fa-robot"></i> ${text}`;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function clearChat() {
+            // Оставляем только одно приветственное сообщение
+            chatMessages.innerHTML = '<div class="msg assistant"><i class="fas fa-robot"></i> Здравствуйте! Команды: привет, сколько людей, очистить количество людей, сбрось доход, удали аккаунт.</div>';
+        }
+
+        function processChat() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            addMessage(text, 'user');
+            chatInput.value = '';
+
+            const lower = text.toLowerCase();
+            const biz = businesses.find(b => b.id === currentBusinessId);
+            if (!biz) {
+                addMessage('Сначала выберите бизнес.', 'assistant');
+                return;
+            }
+
+            if (lower.includes('привет')) {
+                addMessage('Здравствуйте! Чем могу помочь?', 'assistant');
+            } else if (lower.includes('сколько людей')) {
+                addMessage(`Сегодня пришло: ${biz.people} чел.`, 'assistant');
+            } else if (lower.includes('очистить количество людей')) {
+                biz.people = 124;
+                if (page3.classList.contains('active')) peopleVal.innerText = biz.people;
+                addMessage('Количество людей сброшено до 124.', 'assistant');
+            } else if (lower.includes('сбрось доход')) {
+                biz.earned = 30000;
+                if (page3.classList.contains('active')) earnedVal.innerText = biz.earned.toLocaleString() + ' ₽';
+                addMessage('Доход сброшен до 30 000 ₽.', 'assistant');
+            } else if (lower.includes('удали аккаунт')) {
+                businesses = [];
+                currentBusinessId = null;
+                userFio = '';
+                userGlobalAddress = '';
+                clearChat();                // очищаем историю чата
+                showPage('page0');           // возврат на регистрацию (кнопка чата скроется автоматически)
+                addMessage('Аккаунт удалён.', 'assistant'); // это сообщение не добавится, т.к. мы уже на page0, но можно оставить
+            } else {
+                addMessage('Неизвестная команда.', 'assistant');
+            }
+            updateDonut();
+        }
+
+        sendChat.addEventListener('click', processChat);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') processChat(); });
+
+        // ========== НАВИГАЦИЯ С 3 ==========
+        toDocsPage.addEventListener('click', () => { renderPage4(); showPage('page4'); });
+        toEmpsPage.addEventListener('click', () => { renderEmployees(); showPage('page5'); });
+
+        // Предварительный рендер
+        renderEmployees();
+    })();
+</script>
+</body>
+</html>
