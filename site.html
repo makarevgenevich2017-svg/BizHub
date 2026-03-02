@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Бизнес‑портал · Минимализм</title>
+    <title>CBT · Бизнес‑портал</title>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -631,7 +631,7 @@
 <div class="app">
     <!-- Верхняя панель с кнопкой чата (скрыта на странице входа) -->
     <div class="top-bar">
-        <div class="logo">BizHub</div>
+        <div class="logo">CBT</div>
         <div class="right-actions">
             <button class="chat-header-btn hidden" id="chatHeaderBtn"><i class="fas fa-comment"></i></button>
             <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i> Тёмная</button>
@@ -1203,7 +1203,7 @@
                 userGlobalAddress = '';
                 clearChat();                // очищаем историю чата
                 showPage('page0');           // возврат на регистрацию (кнопка чата скроется автоматически)
-                addMessage('Аккаунт удалён.', 'assistant'); // это сообщение не добавится, т.к. мы уже на page0, но можно оставить
+                addMessage('Аккаунт удалён.', 'assistant'); // не добавится, т.к. мы уже на page0
             } else {
                 addMessage('Неизвестная команда.', 'assistant');
             }
